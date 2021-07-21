@@ -52,7 +52,6 @@ public class ExcelRequestQueueListener {
     public void fanoutQueueListener(ExcelRequest response) {
         ExcelSNSRequest snsRequest = new ExcelSNSRequest();
         snsRequest.setExcelRequest(response);
-
         log.info("Get fanout request: {}", snsRequest);
         queueListener(snsRequest.getExcelRequest());
     }

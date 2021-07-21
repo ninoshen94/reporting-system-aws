@@ -122,8 +122,6 @@ public class ReportServiceImpl implements ReportService {
         ReportRequestEntity entity = persistToLocal(request, true, false);
         snsService.sendReportNotification(request);
         log.info("Send SNS the message on modification: {}",request);
-        send(request, "Excel_Request_Queue");
-        send(request, "PDF_Request_Queue");
         return new ReportVO(entity);
     }
 
@@ -133,9 +131,6 @@ public class ReportServiceImpl implements ReportService {
         ReportRequestEntity entity = persistToLocal(request, false, false);
         snsService.sendReportNotification(request);
         log.info("Send SNS the message: {}",request);
-
-        send(request, "Excel_Request_Queue");
-        send(request, "PDF_Request_Queue");
         return new ReportVO(entity);
     }
 
