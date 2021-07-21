@@ -26,7 +26,6 @@ public class ExcelRequestQueueListener {
         this.excelService = excelService;
     }
 
-   // @SqsListener("PDF_Request_Queue")
     public void queueListener(ExcelRequest request) {
 //        log.info("Get request: {}", request);
         ExcelFileEntity file = null;

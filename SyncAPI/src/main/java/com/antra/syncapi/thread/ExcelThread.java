@@ -13,10 +13,9 @@ import org.springframework.web.client.RestTemplate;
 import java.util.concurrent.Callable;
 
 public class ExcelThread implements Callable<ExcelResponse> {
-    @Autowired
-    private RestTemplate rs;
+    private final RestTemplate rs;
+    private final ReportRequest request;
     private ExcelResponse response;
-    private ReportRequest request;
 
     public ExcelThread(ReportRequest request) {
         this.response = new ExcelResponse();

@@ -16,12 +16,12 @@ public class TestSendEmail {
 
 
     @Test
-    public void testSendingEmail() {
+    public void testPersistToLocal() {
         Map<String, String> message = new HashMap<>();
-        message.put("to", "dawei.zhuang@antra.com");
-        message.put("from", "do_not_reply@antra.com");
+        message.put("to", "ninoshen94@gmail.com");
+        message.put("from", "do_not_reply@thisisafakeemail.com");
         message.put("subject", "Test Email");
-        message.put("body", "I did it");
+        message.put("body", "Hi there!");
         message.put("token", "12345");
         queueMessagingTemplate.convertAndSend("email_queue", message);
     }

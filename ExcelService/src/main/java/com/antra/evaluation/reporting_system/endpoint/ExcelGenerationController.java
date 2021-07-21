@@ -42,12 +42,6 @@ public class ExcelGenerationController {
         this.excelService = excelService;
     }
 
-//    @PostMapping(value = "/excel")
-//    @ApiOperation("Generate Excel")
-//    public ResponseEntity<ExcelResponse> createExcel(@RequestBody String request) {
-//        System.out.println(request);
-//        return null;
-//    }
     @PostMapping(value = "/excel", consumes = "application/json", produces = "application/json")
     @ApiOperation("Generate Excel")
     public ResponseEntity<ExcelResponse> createExcel(@RequestBody @Validated ExcelRequest request) {

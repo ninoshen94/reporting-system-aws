@@ -94,7 +94,6 @@ public class ReportServiceImpl implements ReportService {
 
     private void sendDirectRequests(ReportRequest request) {
         RestTemplate rs = new RestTemplate();
-        System.out.println(request);
         CombinedResponse response = rs.postForObject("http://localhost:80/sync", request, CombinedResponse.class);
         if (response.getExcelResponse().isFailed()) {
             log.error("Excel Generation Error (Sync)");
