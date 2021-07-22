@@ -11,6 +11,7 @@ BACK END:
 4. Serialized the HashMap to store generated files in Excel generating application to a Hibernate(H2) based database.
 5. Built a Eureka server to access the Microservice Architecture, and create a new project as a client of the Eureka server and move all sync api part to the project as microservice parts. The testing proved the system works decently under the pressure. 
 6. Moved the default storage location of generated Excel documents to S3 Bucket from local storage. Pressure test will no longer generate tons of trash files to the local storage.
+7. Designed and improved the "DELETE" apis for both of Excel generation service and Pdf generation service.
 
 TESTING:
 1. Conducted the pressure test to the GET method of main page and the Sync POST API with the help of PerfTest and Junit.

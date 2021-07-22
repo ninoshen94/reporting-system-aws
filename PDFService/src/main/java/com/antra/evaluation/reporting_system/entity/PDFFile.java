@@ -1,4 +1,4 @@
-package com.antra.evaluation.reporting_system.pojo.report;
+package com.antra.evaluation.reporting_system.entity;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
@@ -19,7 +19,7 @@ public class PDFFile {
     @DynamoDBAttribute(attributeName="Description")
     private String description;
     @DynamoDBAttribute(attributeName="Time")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
+    @DynamoDBTypeConverted(converter = LocalDateTimeToStringTypeConverter.class)
     private LocalDateTime generatedTime;
 
     public String getId() {

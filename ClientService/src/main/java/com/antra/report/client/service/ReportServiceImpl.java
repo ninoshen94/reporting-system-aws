@@ -187,10 +187,21 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public boolean deleteEntry(String reqId) {
         log.info("Get Delete Command on ID: {}", reqId);
-        reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
+        ReportRequestEntity entry = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
+        RestTemplate rs = new RestTemplate();
         try {
             //TODO: Also delete the real files.
             reportRequestRepo.deleteById(reqId);
+            System.out.println(entry.getExcelReport().getFileId());
+            System.out.println(entry.getExcelReport().getFileLocation());
+            System.out.println(entry.getExcelReport().getFileSize());
+            System.out.println(entry.getExcelReport().getCreatedTime());
+            System.out.println(entry.getPdfReport().getFileId());
+            System.out.println(entry.getPdfReport().getFileLocation());
+            System.out.println(entry.getPdfReport().getFileSize());
+            System.out.println(entry.getPdfReport().getCreatedTime());
+            rs.delete("http://localhost:8888/excel/" + entry.getExcelReport().getFileId());
+            rs.delete("http://localhost:9999/pdf/" + entry.getPdfReport().getFileId());
         } catch (Exception e) {
             return false;
         }

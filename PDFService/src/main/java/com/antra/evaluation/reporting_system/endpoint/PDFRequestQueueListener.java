@@ -3,7 +3,7 @@ package com.antra.evaluation.reporting_system.endpoint;
 import com.antra.evaluation.reporting_system.pojo.api.PDFRequest;
 import com.antra.evaluation.reporting_system.pojo.api.PDFResponse;
 import com.antra.evaluation.reporting_system.pojo.api.PDFSNSRequest;
-import com.antra.evaluation.reporting_system.pojo.report.PDFFile;
+import com.antra.evaluation.reporting_system.entity.PDFFile;
 import com.antra.evaluation.reporting_system.service.PDFService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

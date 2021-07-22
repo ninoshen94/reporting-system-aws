@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,8 @@ public class ExcelServiceImpl implements ExcelService {
     @Override
     public ExcelFile generateFile(ExcelRequest request, boolean multisheet) {
         ExcelFile file = new ExcelFile();
-        file.setFileId(UUID.randomUUID().toString());
+        file.setFileId("Excel- " + UUID.randomUUID().toString());
+        file.setGeneratedTime(LocalDateTime.now().toString());
         ExcelData data = new ExcelData();
         data.setTitle(request.getDescription());
         data.setFileId(file.getFileId());
@@ -79,15 +81,7 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     @Override
-    public List<ExcelFile> getExcelList() {
-        List<ExcelFile> temp = new LinkedList<>();
-        excelRepository.findAll().forEach(temp::add);
-        return temp;
-    }
-
-    @Override
     public ExcelFile deleteFile(String id) throws FileNotFoundException {
-
         ExcelFile excelFile = excelRepository.findById(id).orElseThrow(FileNotFoundException::new);
         excelRepository.deleteById(id);
         s3Client.deleteObject(s3Bucket, id);
@@ -104,6 +98,7 @@ public class ExcelServiceImpl implements ExcelService {
         sheets.add(sheet);
         return sheets;
     }
+
     private List<ExcelDataSheet> generateMultiSheet(ExcelRequest request) {
         List<ExcelDataSheet> sheets = new ArrayList<>();
         int index = request.getHeaders().indexOf(((MultiSheetExcelRequest) request).getSplitBy());

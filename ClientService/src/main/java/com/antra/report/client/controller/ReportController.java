@@ -13,6 +13,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -76,10 +77,11 @@ public class ReportController {
     @DeleteMapping("/report/{reqId}")
     public ResponseEntity<GeneralResponse> deleteFile(@PathVariable String reqId, HttpServletResponse response) {
         log.info("Got Request to Delete the Entry: {}", reqId);
-        if (reportService.deleteEntry(reqId)) {
-            return ResponseEntity.ok(new GeneralResponse());
+        if (!reportService.deleteEntry(reqId)) {
+            log.error("Delete error");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return ResponseEntity.ok(new GeneralResponse());
     }
 
     @PutMapping("/report/{reqId}/{method}")

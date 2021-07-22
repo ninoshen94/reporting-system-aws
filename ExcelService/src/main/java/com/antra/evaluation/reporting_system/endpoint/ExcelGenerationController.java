@@ -14,16 +14,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.security.InvalidParameterException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +26,6 @@ import java.util.stream.Collectors;
 public class ExcelGenerationController {
 
     private static final Logger log = LoggerFactory.getLogger(ExcelGenerationController.class);
-    private static final String DOWNLOAD_API_URI = "/excel/{id}/content";
     ExcelService excelService;
 
     @Autowired
@@ -53,13 +46,6 @@ public class ExcelGenerationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-//    private String generateFileDownloadLink(String fileId) {
-//        UriComponents uriComponents = UriComponentsBuilder.newInstance()
-//                .scheme("http").host("localhost:8080").path(DOWNLOAD_API_URI) // localhost:8080 need to be externalized as parameter
-//                .buildAndExpand(fileId);
-//        return uriComponents.toUriString();
-//    }
-
     @PostMapping("/excel/auto")
     @ApiOperation("Generate Multi-Sheet Excel Using Split field")
     public ResponseEntity<ExcelResponse> createMultiSheetExcel(@RequestBody @Validated MultiSheetExcelRequest request) {
@@ -74,30 +60,6 @@ public class ExcelGenerationController {
         response.setFileLocation(fileInfo.getFileLocation());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-//    @GetMapping("/excel")
-//    @ApiOperation("List all existing files")
-//    public ResponseEntity<List<ExcelResponse>> listExcels() {
-//        log.debug("Got Request to List All Files");
-//        List<ExcelFile> fileList = excelService.getExcelList();
-//        var responseList = fileList.stream().map(file -> {
-//            ExcelResponse response = new ExcelResponse();
-//            BeanUtils.copyProperties(file, response);
-//            response.setFileLocation(this.generateFileDownloadLink(file.getFileId()));
-//            return response;
-//        }).collect(Collectors.toList());
-//        return new ResponseEntity<>(responseList, HttpStatus.OK);
-//    }
-
-//    @GetMapping(DOWNLOAD_API_URI)
-//    public void downloadExcel(@PathVariable String id, HttpServletResponse response) throws IOException {
-//        log.debug("Got Request to Download File:{}", id);
-//        InputStream fis = excelService.getExcelBodyById(id);
-//        response.setHeader("Content-Type", "application/vnd.ms-excel");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"" + id + ".xlsx\"");
-//        FileCopyUtils.copy(fis, response.getOutputStream());
-//        log.debug("Downloaded File:{}", id);
-//    }
 
     @DeleteMapping("/excel/{id}")
     public ResponseEntity<ExcelResponse> deleteExcel(@PathVariable String id) throws FileNotFoundException {

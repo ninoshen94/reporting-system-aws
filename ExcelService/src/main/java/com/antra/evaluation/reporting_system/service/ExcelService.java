@@ -12,7 +12,5 @@ public interface ExcelService {
 
     ExcelFile generateFile(ExcelRequest request, boolean multisheet);
 
-    List<ExcelFile> getExcelList();
-
     ExcelFile deleteFile(String id) throws FileNotFoundException;
 }

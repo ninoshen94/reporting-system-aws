@@ -19,8 +19,7 @@ public class ExcelFile {
     @DynamoDBAttribute(attributeName="Description")
     private String description;
     @DynamoDBAttribute(attributeName="Time")
-    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
-    private LocalDateTime generatedTime;
+    private String generatedTime;
 
 
     public Long getFileSize() {
@@ -77,11 +76,11 @@ public class ExcelFile {
     }
 
 
-    public LocalDateTime getGeneratedTime() {
+    public String getGeneratedTime() {
         return generatedTime;
     }
 
-    public void setGeneratedTime(LocalDateTime generatedTime) {
+    public void setGeneratedTime(String generatedTime) {
         this.generatedTime = generatedTime;
     }
 
