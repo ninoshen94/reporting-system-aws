@@ -96,7 +96,7 @@ public class ExcelGenerationController {
         log.debug("Got Request to Download File:{}", id);
         InputStream fis = excelService.getExcelBodyById(id);
         response.setHeader("Content-Type", "application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "attachment; filename=\"name_of_excel_file.xls\""); // TODO: File name cannot be hardcoded here
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + id + ".xlsx\"");
         FileCopyUtils.copy(fis, response.getOutputStream());
         log.debug("Downloaded File:{}", id);
     }

@@ -1,5 +1,6 @@
 package com.antra.evaluation.reporting_system.service;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.antra.evaluation.reporting_system.exception.FileGenerationException;
 import com.antra.evaluation.reporting_system.pojo.api.ExcelRequest;
 import com.antra.evaluation.reporting_system.pojo.api.MultiSheetExcelRequest;
@@ -10,11 +11,11 @@ import com.antra.evaluation.reporting_system.entity.ExcelFileEntity;
 import com.antra.evaluation.reporting_system.repo.ExcelDatabaseRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.time.LocalDateTime;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -23,14 +24,18 @@ public class ExcelServiceImpl implements ExcelService {
 
     private static final Logger log = LoggerFactory.getLogger(ExcelServiceImpl.class);
 
-    ExcelDatabaseRepo excelRepository;
+    private final ExcelDatabaseRepo excelRepository;
 
-    private ExcelGenerationService excelGenerationService;
+    private final ExcelGenerationServiceImpl excelGenerationService;
+    private final AmazonS3 s3Client;
 
-    @Autowired
-    public ExcelServiceImpl(ExcelDatabaseRepo excelRepository, ExcelGenerationService excelGenerationService) {
+    @Value("${s3.bucket}")
+    private String s3Bucket;
+
+    public ExcelServiceImpl(AmazonS3 amazonS3, ExcelDatabaseRepo excelRepository, ExcelGenerationServiceImpl excelGenerationService) {
         this.excelRepository = excelRepository;
         this.excelGenerationService = excelGenerationService;
+        this.s3Client = amazonS3;
     }
 
     @Override
@@ -41,32 +46,36 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     public ExcelFileEntity generateFile(ExcelRequest request, boolean multisheet) {
-        ExcelFileEntity fileInfo = new ExcelFileEntity();
-        fileInfo.setFileId(UUID.randomUUID().toString());
+        ExcelFileEntity file = new ExcelFileEntity();
+        file.setFileId(UUID.randomUUID().toString());
         ExcelData data = new ExcelData();
         data.setTitle(request.getDescription());
-        data.setFileId(fileInfo.getFileId());
-        data.setSubmitter(fileInfo.getSubmitter());
+        data.setFileId(file.getFileId());
+        data.setSubmitter(request.getSubmitter());
         if(multisheet){
             data.setSheets(generateMultiSheet(request));
         }else {
             data.setSheets(generateSheet(request));
         }
         try {
-            File generatedFile = excelGenerationService.generateExcelReport(data);
-            fileInfo.setFileLocation(generatedFile.getAbsolutePath());
-            fileInfo.setFileName(generatedFile.getName());
-            fileInfo.setGeneratedTime(LocalDateTime.now());
-            fileInfo.setSubmitter(request.getSubmitter());
-            fileInfo.setFileSize(generatedFile.length());
-            fileInfo.setDescription(request.getDescription());
+            ExcelFileEntity generatedFile = excelGenerationService.generateExcelReport(data);
+            File temp = new File(generatedFile.getFileLocation());
+            log.debug("Upload temp file to s3 {}", generatedFile.getFileLocation());
+            s3Client.putObject(s3Bucket,file.getFileId(),temp);
+            log.debug("Uploaded");
+
+            file.setFileLocation(String.join("/",s3Bucket,file.getFileId()));
+            file.setFileSize(generatedFile.getFileSize());
+            file.setFileName(generatedFile.getFileName());
+            excelRepository.save(file);
+            if(temp.delete()){
+                log.debug("temp cleared");
+            }
         } catch (IOException e) {
-//            log.error("Error in generateFile()", e);
+            log.error("Error in generateFile()", e);
             throw new FileGenerationException(e);
         }
-        excelRepository.save(fileInfo);
-        log.debug("Excel File Generated : {}", fileInfo);
-        return fileInfo;
+        return file;
     }
 
     @Override

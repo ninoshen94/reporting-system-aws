@@ -61,7 +61,7 @@ public class ReportController {
             fileName = "report.pdf";
         } else if (type == FileType.EXCEL) {
             fileType = "application/vnd.ms-excel";
-            fileName = "report.xls";
+            fileName = "report.xlsx";
         }
         response.setHeader("Content-Type", fileType);
         response.setHeader("fileName", fileName);

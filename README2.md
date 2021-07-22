@@ -10,6 +10,7 @@ BACK END:
 3. Optimized the document generate process for Sync API by using multi-thread feature of Java to simultaneously generate the Excel report and PDF report.
 4. Serialized the HashMap to store generated files in Excel generating application to a Hibernate(H2) based database.
 5. Built a Eureka server to access the Microservice Architecture, and create a new project as a client of the Eureka server and move all sync api part to the project as microservice parts. The testing proved the system works decently under the pressure. 
+6. Moved the default storage location of generated Excel documents to S3 Bucket from local storage. Pressure test will no longer generate tons of trash files to the local storage.
 
 TESTING:
 1. Conducted the pressure test to the GET method of main page and the Sync POST API with the help of PerfTest and Junit.

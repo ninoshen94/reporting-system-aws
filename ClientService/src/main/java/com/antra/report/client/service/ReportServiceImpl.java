@@ -205,15 +205,10 @@ public class ReportServiceImpl implements ReportService {
             String key = fileLocation.split("/")[1];
             return s3Client.getObject(bucket, key).getObjectContent();
         } else if (type == FileType.EXCEL) {
-            String fileId = entity.getExcelReport().getFileId();
-            RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<Resource> exchange = restTemplate.exchange("http://localhost:8888/excel/{id}/content",
-                    HttpMethod.GET, null, Resource.class, fileId);
-            try {
-                return exchange.getBody().getInputStream();
-            } catch (IOException e) {
-                log.error("Cannot download excel",e);
-            }
+            String fileLocation = entity.getExcelReport().getFileLocation();
+            String bucket = fileLocation.split("/")[0];
+            String key = fileLocation.split("/")[1];
+            return s3Client.getObject(bucket, key).getObjectContent();
         }
         return null;
     }

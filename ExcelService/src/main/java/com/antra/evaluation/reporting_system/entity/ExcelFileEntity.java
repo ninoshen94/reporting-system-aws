@@ -1,13 +1,11 @@
 package com.antra.evaluation.reporting_system.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.time.LocalDateTime;
 
-@Entity(name = "excel_file")
+@Document
 public class ExcelFileEntity {
-    @Id
     private String fileId;
     private String fileName;
     private String fileLocation;

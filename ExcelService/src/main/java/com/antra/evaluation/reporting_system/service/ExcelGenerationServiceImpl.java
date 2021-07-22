@@ -1,12 +1,15 @@
 package com.antra.evaluation.reporting_system.service;
 
+import com.antra.evaluation.reporting_system.entity.ExcelFileEntity;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelData;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelDataHeader;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelDataSheet;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.io.File;
@@ -26,8 +29,9 @@ import java.util.List;
  *              - dataRows
  *                   - List of objects/values
  */
-@Service
-public class ExcelGenerationServiceImpl implements ExcelGenerationService {
+@Component
+public class ExcelGenerationServiceImpl {
+    private static final Logger log = LoggerFactory.getLogger(ExcelGenerationServiceImpl.class);
 
     private void validateDate(ExcelData data) {
         if (data.getSheets().size() < 1) {
@@ -48,8 +52,7 @@ public class ExcelGenerationServiceImpl implements ExcelGenerationService {
         }
     }
 
-    @Override
-    public File generateExcelReport(ExcelData data) throws IOException {
+    public ExcelFileEntity generateExcelReport(ExcelData data) throws IOException {
         validateDate(data);
         XSSFWorkbook workbook = new XSSFWorkbook();
 
@@ -85,12 +88,6 @@ public class ExcelGenerationServiceImpl implements ExcelGenerationService {
                 var eachRow = rowData.get(i);
                 for (int j = 0; j < eachRow.size(); j++) {
                     Cell cell = row.createCell(j);
-//                    switch (headersData.get(j).getType()) {
-//                        case STRING:cell.setCellValue(String.valueOf(eachRow.get(j))); cell.setCellType(CellType.STRING);break;
-//                        case NUMBER: cell.setCellValue(eachRow.get(j));cell.setCellType(CellType.NUMERIC);break;
-//                        case DATE:cell.setCellValue((Date)eachRow.get(j));break;
-//                        default:cell.setCellValue(String.valueOf(eachRow.get(j)));break;
-//                    }
                     cell.setCellValue(String.valueOf(eachRow.get(j)));
                     cell.setCellStyle(style);
                 }
@@ -101,18 +98,23 @@ public class ExcelGenerationServiceImpl implements ExcelGenerationService {
         }
 
 
-        File currDir = new File(".");
-        String path = currDir.getAbsolutePath();
-        String fileLocation = path.substring(0, path.length() - 1) + data.getFileId() +".xlsx";
+        ExcelFileEntity report = new ExcelFileEntity();
+        File temp = File.createTempFile(data.getSubmitter(),"_tmp.xlsx");
+        String path = temp.getAbsolutePath();
 
-        FileOutputStream outputStream = new FileOutputStream(fileLocation);
+        FileOutputStream outputStream = new FileOutputStream(path);
         workbook.write(outputStream);
         try {
             workbook.close();
         } catch (IOException e) {
+            log.error("Generating excel error: {}", e.getMessage());
             e.printStackTrace();
         }
-        return new File(fileLocation);
+
+        report.setFileLocation(temp.getAbsolutePath());
+        report.setFileName(temp.getName());
+        report.setFileSize(temp.length());
+        return report;
     }
 
 }
