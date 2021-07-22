@@ -7,7 +7,7 @@ import com.antra.evaluation.reporting_system.pojo.api.MultiSheetExcelRequest;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelData;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelDataHeader;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelDataSheet;
-import com.antra.evaluation.reporting_system.entity.ExcelFileEntity;
+import com.antra.evaluation.reporting_system.entity.ExcelFile;
 import com.antra.evaluation.reporting_system.repo.ExcelDatabaseRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,13 +40,13 @@ public class ExcelServiceImpl implements ExcelService {
 
     @Override
     public InputStream getExcelBodyById(String id) throws FileNotFoundException {
-        Optional<ExcelFileEntity> fileInfo = excelRepository.findById(id);
+        Optional<ExcelFile> fileInfo = excelRepository.findById(id);
         return new FileInputStream(fileInfo.orElseThrow(FileNotFoundException::new).getFileLocation());
     }
 
     @Override
-    public ExcelFileEntity generateFile(ExcelRequest request, boolean multisheet) {
-        ExcelFileEntity file = new ExcelFileEntity();
+    public ExcelFile generateFile(ExcelRequest request, boolean multisheet) {
+        ExcelFile file = new ExcelFile();
         file.setFileId(UUID.randomUUID().toString());
         ExcelData data = new ExcelData();
         data.setTitle(request.getDescription());
@@ -58,7 +58,7 @@ public class ExcelServiceImpl implements ExcelService {
             data.setSheets(generateSheet(request));
         }
         try {
-            ExcelFileEntity generatedFile = excelGenerationService.generateExcelReport(data);
+            ExcelFile generatedFile = excelGenerationService.generateExcelReport(data);
             File temp = new File(generatedFile.getFileLocation());
             log.debug("Upload temp file to s3 {}", generatedFile.getFileLocation());
             s3Client.putObject(s3Bucket,file.getFileId(),temp);
@@ -79,17 +79,20 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     @Override
-    public List<ExcelFileEntity> getExcelList() {
-        return excelRepository.findAll();
+    public List<ExcelFile> getExcelList() {
+        List<ExcelFile> temp = new LinkedList<>();
+        excelRepository.findAll().forEach(temp::add);
+        return temp;
     }
 
     @Override
-    public ExcelFileEntity deleteFile(String id) throws FileNotFoundException {
-        ExcelFileEntity excelFileEntity = excelRepository.findById(id).orElseThrow(FileNotFoundException::new);
+    public ExcelFile deleteFile(String id) throws FileNotFoundException {
+
+        ExcelFile excelFile = excelRepository.findById(id).orElseThrow(FileNotFoundException::new);
         excelRepository.deleteById(id);
-        File file = new File(excelFileEntity.getFileLocation());
-        file.delete();
-        return excelFileEntity;
+        s3Client.deleteObject(s3Bucket, id);
+        log.info("File has been deleted, id: {}", id);
+        return excelFile;
     }
 
     private List<ExcelDataSheet> generateSheet(ExcelRequest request) {
@@ -110,11 +113,7 @@ public class ExcelServiceImpl implements ExcelService {
                 entry ->{
                     ExcelDataSheet sheet = new ExcelDataSheet();
                     sheet.setHeaders(headers);
-                    sheet.setDataRows(entry.getValue().stream().map(listOfString -> {
-                        List<Object> listOfObject = new ArrayList<>();
-                        listOfString.forEach(listOfObject::add);
-                        return listOfObject;
-                    }).collect(Collectors.toList()));
+                    sheet.setDataRows(entry.getValue().stream().map(listOfString -> (List<Object>) new ArrayList<Object>(listOfString)).collect(Collectors.toList()));
                     sheet.setTitle(entry.getKey());
                     sheets.add(sheet);
                 }

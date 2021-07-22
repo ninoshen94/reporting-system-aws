@@ -1,22 +1,32 @@
 package com.antra.evaluation.reporting_system.entity;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import java.time.LocalDateTime;
 
-@Document
-public class ExcelFileEntity {
+@DynamoDBTable(tableName="Excel")
+public class ExcelFile {
+    @DynamoDBHashKey(attributeName="Id")
     private String fileId;
+    @DynamoDBAttribute(attributeName="FileName")
     private String fileName;
+    @DynamoDBAttribute(attributeName="Location")
     private String fileLocation;
+    @DynamoDBAttribute(attributeName="Submitter")
     private String submitter;
+    @DynamoDBAttribute(attributeName="FileSize")
     private Long fileSize;
+    @DynamoDBAttribute(attributeName="Description")
     private String description;
+    @DynamoDBAttribute(attributeName="Time")
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
     private LocalDateTime generatedTime;
+
 
     public Long getFileSize() {
         return fileSize;
     }
+
 
     public String getDescription() {
         return description;
@@ -30,6 +40,7 @@ public class ExcelFileEntity {
         this.fileSize = fileSize;
     }
 
+
     public String getFileId() {
         return fileId;
     }
@@ -37,6 +48,7 @@ public class ExcelFileEntity {
     public void setFileId(String fileId) {
         this.fileId = fileId;
     }
+
 
     public String getFileName() {
         return fileName;
@@ -46,6 +58,7 @@ public class ExcelFileEntity {
         this.fileName = fileName;
     }
 
+
     public String getFileLocation() {
         return fileLocation;
     }
@@ -54,6 +67,7 @@ public class ExcelFileEntity {
         this.fileLocation = fileLocation;
     }
 
+
     public String getSubmitter() {
         return submitter;
     }
@@ -61,6 +75,7 @@ public class ExcelFileEntity {
     public void setSubmitter(String submitter) {
         this.submitter = submitter;
     }
+
 
     public LocalDateTime getGeneratedTime() {
         return generatedTime;

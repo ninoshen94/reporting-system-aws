@@ -3,7 +3,7 @@ package com.antra.evaluation.reporting_system.endpoint;
 import com.antra.evaluation.reporting_system.pojo.api.ExcelRequest;
 import com.antra.evaluation.reporting_system.pojo.api.ExcelResponse;
 import com.antra.evaluation.reporting_system.pojo.api.ExcelSNSRequest;
-import com.antra.evaluation.reporting_system.entity.ExcelFileEntity;
+import com.antra.evaluation.reporting_system.entity.ExcelFile;
 import com.antra.evaluation.reporting_system.service.ExcelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +28,7 @@ public class ExcelRequestQueueListener {
 
     public void queueListener(ExcelRequest request) {
 //        log.info("Get request: {}", request);
-        ExcelFileEntity file = null;
+        ExcelFile file = null;
         ExcelResponse response = new ExcelResponse();
         response.setReqId(request.getReqId());
 

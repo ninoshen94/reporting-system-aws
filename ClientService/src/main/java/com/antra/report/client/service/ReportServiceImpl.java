@@ -189,6 +189,7 @@ public class ReportServiceImpl implements ReportService {
         log.info("Get Delete Command on ID: {}", reqId);
         reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
         try {
+            //TODO: Also delete the real files.
             reportRequestRepo.deleteById(reqId);
         } catch (Exception e) {
             return false;

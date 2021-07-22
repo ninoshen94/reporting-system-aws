@@ -47,7 +47,6 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-webmvc:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.2.8.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-context:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: io.springfox:springfox-swagger2:2.9.2" level="project" />
     <orderEntry type="library" name="Maven: io.swagger:swagger-annotations:1.5.20" level="project" />
@@ -75,11 +74,6 @@
     <orderEntry type="library" name="Maven: org.apache.poi:poi-scratchpad:4.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.poi:poi-ooxml-schemas:4.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.apache.xmlbeans:xmlbeans:3.1.0" level="project" />
-    <orderEntry type="library" name="Maven: fr.opensagres.xdocreport:fr.opensagres.poi.xwpf.converter.pdf:2.0.2" level="project" />
-    <orderEntry type="library" name="Maven: fr.opensagres.xdocreport:fr.opensagres.poi.xwpf.converter.core:2.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.poi:ooxml-schemas:1.4" level="project" />
-    <orderEntry type="library" name="Maven: fr.opensagres.xdocreport:fr.opensagres.xdocreport.itext.extension:2.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.lowagie:itext:2.1.7" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.springframework.boot:spring-boot-devtools:2.3.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.3.3.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-autoconfigure:2.3.3.RELEASE" level="project" />
@@ -134,33 +128,38 @@
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-aws-messaging:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-aws-context:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-aws-core:2.2.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-s3:1.11.415" level="project" />
-    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-kms:1.11.415" level="project" />
     <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-ec2:1.11.415" level="project" />
     <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-cloudformation:1.11.415" level="project" />
     <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-sns:1.11.415" level="project" />
-    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-core:1.11.415" level="project" />
-    <orderEntry type="library" name="Maven: software.amazon.ion:ion-java:1.0.2" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.11.2" level="project" />
-    <orderEntry type="library" name="Maven: joda-time:joda-time:2.8.1" level="project" />
-    <orderEntry type="library" name="Maven: com.amazonaws:jmespath-java:1.11.415" level="project" />
     <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-sqs:1.11.415" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-messaging:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:javax.activation-api:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.cloud:spring-cloud-aws-autoconfigure:2.2.1.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-data-mongodb:2.3.3.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-sync:4.0.5" level="project" />
-    <orderEntry type="library" name="Maven: org.mongodb:bson:4.0.5" level="project" />
-    <orderEntry type="library" name="Maven: org.mongodb:mongodb-driver-core:4.0.5" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-mongodb:3.0.3.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-dynamodb:1.12.28" level="project" />
+    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-s3:1.12.28" level="project" />
+    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-kms:1.12.28" level="project" />
+    <orderEntry type="library" name="Maven: com.amazonaws:aws-java-sdk-core:1.12.28" level="project" />
+    <orderEntry type="library" name="Maven: software.amazon.ion:ion-java:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.11.2" level="project" />
+    <orderEntry type="library" name="Maven: joda-time:joda-time:2.8.1" level="project" />
+    <orderEntry type="library" name="Maven: com.amazonaws:jmespath-java:1.12.28" level="project" />
+    <orderEntry type="library" name="Maven: com.github.derjust:spring-data-dynamodb:5.0.4" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.2.8.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.3.3.RELEASE" level="project" />
-    <orderEntry type="library" name="Maven: de.flapdoodle.embed:de.flapdoodle.embed.mongo:2.2.0" level="project" />
-    <orderEntry type="library" name="Maven: de.flapdoodle.embed:de.flapdoodle.embed.process:2.1.2" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.10" level="project" />
-    <orderEntry type="library" name="Maven: net.java.dev.jna:jna:4.0.0" level="project" />
-    <orderEntry type="library" name="Maven: net.java.dev.jna:jna-platform:4.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.hibernate.validator:hibernate-validator:6.1.5.Final" level="project" />
+    <orderEntry type="library" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.4.1.Final" level="project" />
+    <orderEntry type="library" name="Maven: javax.enterprise:cdi-api:1.2" level="project" />
+    <orderEntry type="library" name="Maven: javax.el:javax.el-api:3.0.0" level="project" />
+    <orderEntry type="library" name="Maven: javax.interceptor:javax.interceptor-api:1.2" level="project" />
+    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Maven: fr.opensagres.xdocreport:fr.opensagres.poi.xwpf.converter.pdf:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: fr.opensagres.xdocreport:fr.opensagres.poi.xwpf.converter.core:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.poi:ooxml-schemas:1.4" level="project" />
+    <orderEntry type="library" name="Maven: fr.opensagres.xdocreport:fr.opensagres.xdocreport.itext.extension:2.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.lowagie:itext:2.1.7" level="project" />
     <orderEntry type="library" name="Maven: net.sf.jasperreports:jasperreports:6.15.0" level="project" />
     <orderEntry type="library" name="Maven: commons-beanutils:commons-beanutils:1.9.4" level="project" />
     <orderEntry type="library" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
@@ -171,7 +170,7 @@
     <orderEntry type="library" name="Maven: org.eclipse.jdt:ecj:3.21.0" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.castor:castor-xml:1.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.codehaus.castor:castor-core:1.4.1" level="project" />
-    <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.10" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.11.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.11.2" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.11.2" level="project" />

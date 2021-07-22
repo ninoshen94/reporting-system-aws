@@ -3,7 +3,7 @@ package com.antra.evaluation.reporting_system.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.antra.evaluation.reporting_system.pojo.api.PDFRequest;
 import com.antra.evaluation.reporting_system.pojo.report.PDFFile;
-import com.antra.evaluation.reporting_system.repo.PDFRepository;
+import com.antra.evaluation.reporting_system.repo.PDFDatabaseRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +18,7 @@ public class PDFServiceImpl implements PDFService {
 
     private static final Logger log = LoggerFactory.getLogger(PDFServiceImpl.class);
 
-    private final PDFRepository repository;
+    private final PDFDatabaseRepo repository;
 
     private final PDFGenerator generator;
 
@@ -27,7 +27,7 @@ public class PDFServiceImpl implements PDFService {
     @Value("${s3.bucket}")
     private String s3Bucket;
 
-    public PDFServiceImpl(PDFRepository repository, PDFGenerator generator, AmazonS3 s3Client) {
+    public PDFServiceImpl(PDFDatabaseRepo repository, PDFGenerator generator, AmazonS3 s3Client) {
         this.repository = repository;
         this.generator = generator;
         this.s3Client = s3Client;

@@ -1,17 +1,25 @@
 package com.antra.evaluation.reporting_system.pojo.report;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import java.time.LocalDateTime;
 
-@Document
+@DynamoDBTable(tableName="Pdf")
 public class PDFFile {
+    @DynamoDBHashKey(attributeName="Id")
     private String id;
+    @DynamoDBAttribute(attributeName="FileName")
     private String fileName;
+    @DynamoDBAttribute(attributeName="Location")
     private String fileLocation;
+    @DynamoDBAttribute(attributeName="Submitter")
     private String submitter;
+    @DynamoDBAttribute(attributeName="FileSize")
     private Long fileSize;
+    @DynamoDBAttribute(attributeName="Description")
     private String description;
+    @DynamoDBAttribute(attributeName="Time")
+    @DynamoDBTyped(DynamoDBMapperFieldModel.DynamoDBAttributeType.S)
     private LocalDateTime generatedTime;
 
     public String getId() {

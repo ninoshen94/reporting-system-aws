@@ -1,6 +1,6 @@
 package com.antra.evaluation.reporting_system.service;
 
-import com.antra.evaluation.reporting_system.entity.ExcelFileEntity;
+import com.antra.evaluation.reporting_system.entity.ExcelFile;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelData;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelDataHeader;
 import com.antra.evaluation.reporting_system.pojo.report.ExcelDataSheet;
@@ -52,7 +52,7 @@ public class ExcelGenerationServiceImpl {
         }
     }
 
-    public ExcelFileEntity generateExcelReport(ExcelData data) throws IOException {
+    public ExcelFile generateExcelReport(ExcelData data) throws IOException {
         validateDate(data);
         XSSFWorkbook workbook = new XSSFWorkbook();
 
@@ -98,7 +98,7 @@ public class ExcelGenerationServiceImpl {
         }
 
 
-        ExcelFileEntity report = new ExcelFileEntity();
+        ExcelFile report = new ExcelFile();
         File temp = File.createTempFile(data.getSubmitter(),"_tmp.xlsx");
         String path = temp.getAbsolutePath();
 

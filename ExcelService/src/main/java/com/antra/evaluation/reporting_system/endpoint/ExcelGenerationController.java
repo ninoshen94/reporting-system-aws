@@ -5,16 +5,14 @@ import com.antra.evaluation.reporting_system.pojo.api.ErrorResponse;
 import com.antra.evaluation.reporting_system.pojo.api.ExcelRequest;
 import com.antra.evaluation.reporting_system.pojo.api.ExcelResponse;
 import com.antra.evaluation.reporting_system.pojo.api.MultiSheetExcelRequest;
-import com.antra.evaluation.reporting_system.entity.ExcelFileEntity;
+import com.antra.evaluation.reporting_system.entity.ExcelFile;
 import com.antra.evaluation.reporting_system.service.ExcelService;
 import io.swagger.annotations.ApiOperation;
-import org.mapstruct.MapMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.annotation.Validated;
@@ -46,21 +44,21 @@ public class ExcelGenerationController {
     @ApiOperation("Generate Excel")
     public ResponseEntity<ExcelResponse> createExcel(@RequestBody @Validated ExcelRequest request) {
         log.debug("Got Request to Create Single Sheet Excel:{}", request);
-        ExcelFileEntity fileInfo = excelService.generateFile(request, false);
+        ExcelFile fileInfo = excelService.generateFile(request, false);
         ExcelResponse response = new ExcelResponse();
         BeanUtils.copyProperties(fileInfo, response);
-        response.setFileDownloadLink(this.generateFileDownloadLink(fileInfo.getFileId()));
+        response.setFileDownloadLink(fileInfo.getFileLocation());
         response.setFileLocation(fileInfo.getFileLocation());
         response.setReqId(request.getReqId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    private String generateFileDownloadLink(String fileId) {
-        UriComponents uriComponents = UriComponentsBuilder.newInstance()
-                .scheme("http").host("localhost:8080").path(DOWNLOAD_API_URI) // localhost:8080 need to be externalized as parameter
-                .buildAndExpand(fileId);
-        return uriComponents.toUriString();
-    }
+//    private String generateFileDownloadLink(String fileId) {
+//        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+//                .scheme("http").host("localhost:8080").path(DOWNLOAD_API_URI) // localhost:8080 need to be externalized as parameter
+//                .buildAndExpand(fileId);
+//        return uriComponents.toUriString();
+//    }
 
     @PostMapping("/excel/auto")
     @ApiOperation("Generate Multi-Sheet Excel Using Split field")
@@ -70,44 +68,44 @@ public class ExcelGenerationController {
         if(!request.getHeaders().contains(request.getSplitBy())){
             throw new InvalidParameterException("No such header for splitting the sheets");
         }
-        ExcelFileEntity fileInfo = excelService.generateFile(request, true);
+        ExcelFile fileInfo = excelService.generateFile(request, true);
         ExcelResponse response = new ExcelResponse();
         BeanUtils.copyProperties(fileInfo, response);
-        response.setFileLocation(this.generateFileDownloadLink(fileInfo.getFileId()));
+        response.setFileLocation(fileInfo.getFileLocation());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/excel")
-    @ApiOperation("List all existing files")
-    public ResponseEntity<List<ExcelResponse>> listExcels() {
-        log.debug("Got Request to List All Files");
-        List<ExcelFileEntity> fileList = excelService.getExcelList();
-        var responseList = fileList.stream().map(file -> {
-            ExcelResponse response = new ExcelResponse();
-            BeanUtils.copyProperties(file, response);
-            response.setFileLocation(this.generateFileDownloadLink(file.getFileId()));
-            return response;
-        }).collect(Collectors.toList());
-        return new ResponseEntity<>(responseList, HttpStatus.OK);
-    }
+//    @GetMapping("/excel")
+//    @ApiOperation("List all existing files")
+//    public ResponseEntity<List<ExcelResponse>> listExcels() {
+//        log.debug("Got Request to List All Files");
+//        List<ExcelFile> fileList = excelService.getExcelList();
+//        var responseList = fileList.stream().map(file -> {
+//            ExcelResponse response = new ExcelResponse();
+//            BeanUtils.copyProperties(file, response);
+//            response.setFileLocation(this.generateFileDownloadLink(file.getFileId()));
+//            return response;
+//        }).collect(Collectors.toList());
+//        return new ResponseEntity<>(responseList, HttpStatus.OK);
+//    }
 
-    @GetMapping(DOWNLOAD_API_URI)
-    public void downloadExcel(@PathVariable String id, HttpServletResponse response) throws IOException {
-        log.debug("Got Request to Download File:{}", id);
-        InputStream fis = excelService.getExcelBodyById(id);
-        response.setHeader("Content-Type", "application/vnd.ms-excel");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + id + ".xlsx\"");
-        FileCopyUtils.copy(fis, response.getOutputStream());
-        log.debug("Downloaded File:{}", id);
-    }
+//    @GetMapping(DOWNLOAD_API_URI)
+//    public void downloadExcel(@PathVariable String id, HttpServletResponse response) throws IOException {
+//        log.debug("Got Request to Download File:{}", id);
+//        InputStream fis = excelService.getExcelBodyById(id);
+//        response.setHeader("Content-Type", "application/vnd.ms-excel");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"" + id + ".xlsx\"");
+//        FileCopyUtils.copy(fis, response.getOutputStream());
+//        log.debug("Downloaded File:{}", id);
+//    }
 
     @DeleteMapping("/excel/{id}")
     public ResponseEntity<ExcelResponse> deleteExcel(@PathVariable String id) throws FileNotFoundException {
         log.debug("Got Request to Delete File:{}", id);
         var response = new ExcelResponse();
-        ExcelFileEntity fileDeleted = excelService.deleteFile(id);
+        ExcelFile fileDeleted = excelService.deleteFile(id);
         BeanUtils.copyProperties(fileDeleted, response);
-        response.setFileLocation(this.generateFileDownloadLink(fileDeleted.getFileId()));
+        response.setFileLocation(fileDeleted.getFileLocation());
         log.debug("File Deleted:{}", fileDeleted);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

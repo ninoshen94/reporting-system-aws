@@ -1,7 +1,7 @@
 package com.antra.evaluation.reporting_system.service;
 
 import com.antra.evaluation.reporting_system.pojo.api.ExcelRequest;
-import com.antra.evaluation.reporting_system.entity.ExcelFileEntity;
+import com.antra.evaluation.reporting_system.entity.ExcelFile;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -10,9 +10,9 @@ import java.util.List;
 public interface ExcelService {
     InputStream getExcelBodyById(String id) throws FileNotFoundException;
 
-    ExcelFileEntity generateFile(ExcelRequest request, boolean multisheet);
+    ExcelFile generateFile(ExcelRequest request, boolean multisheet);
 
-    List<ExcelFileEntity> getExcelList();
+    List<ExcelFile> getExcelList();
 
-    ExcelFileEntity deleteFile(String id) throws FileNotFoundException;
+    ExcelFile deleteFile(String id) throws FileNotFoundException;
 }

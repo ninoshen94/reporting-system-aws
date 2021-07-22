@@ -18,3 +18,4 @@ TESTING:
 AWS RELATED:
 1. Correctly set the AWS services to make the initial template work properly.
 2. Changed the SQS logic for PDFrequest to PDFresponse as well as ExcelRequest to ExcelResponse due to default logic doesn't work at my side.
+3. Assigned and Configured DynamoDB as the default NoSQL database for Excel files and PDF files storage location instead of MongoDB.

@@ -4,7 +4,6 @@ import com.antra.evaluation.reporting_system.pojo.api.PDFRequest;
 import com.antra.evaluation.reporting_system.pojo.api.PDFResponse;
 import com.antra.evaluation.reporting_system.pojo.report.PDFFile;
 import com.antra.evaluation.reporting_system.service.PDFService;
-import org.mapstruct.MapMapping;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
