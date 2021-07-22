@@ -11,15 +11,10 @@ import com.antra.report.client.repository.ReportRequestRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
-import org.springframework.cloud.aws.messaging.core.QueueMessagingTemplate;
-import org.springframework.core.io.Resource;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,23 +29,24 @@ public class ReportServiceImpl implements ReportService {
     private final SNSService snsService;
     private final AmazonS3 s3Client;
     private final EmailService emailService;
-    private final QueueMessagingTemplate queueMessagingTemplate;
+    private final RestTemplate rs = new RestTemplate();
 
 
-    public ReportServiceImpl(ReportRequestRepo reportRequestRepo, SNSService snsService, AmazonS3 s3Client, EmailService emailService, QueueMessagingTemplate queueMessagingTemplate) {
+    public ReportServiceImpl(ReportRequestRepo reportRequestRepo, SNSService snsService, AmazonS3 s3Client, EmailService emailService) {
         this.reportRequestRepo = reportRequestRepo;
         this.snsService = snsService;
         this.s3Client = s3Client;
         this.emailService = emailService;
-        this.queueMessagingTemplate = queueMessagingTemplate;
     }
 
     private ReportRequestEntity persistToLocal(ReportRequest request, boolean isModify, boolean isSync) {
 
         if (isModify) {
             String reqId = request.getReqId();
-            reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
+            ReportRequestEntity entry = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
             reportRequestRepo.deleteById(request.getReqId());
+            rs.delete("http://localhost:8888/excel/" + entry.getExcelReport().getFileId());
+            rs.delete("http://localhost:9999/pdf/" + entry.getPdfReport().getFileId());
         }
 
         request.setReqId("Req-"+ UUID.randomUUID().toString());
@@ -95,14 +91,14 @@ public class ReportServiceImpl implements ReportService {
     private void sendDirectRequests(ReportRequest request) {
         RestTemplate rs = new RestTemplate();
         CombinedResponse response = rs.postForObject("http://localhost:80/sync", request, CombinedResponse.class);
-        if (response.getExcelResponse().isFailed()) {
+        if (response == null || response.getExcelResponse().isFailed()) {
             log.error("Excel Generation Error (Sync)");
         }
-        if (response.getPdfResponse().isFailed()) {
+        if (response == null || response.getPdfResponse().isFailed()) {
             log.error("PDF Generation Error (Sync)");
         }
-        updateLocal(response.getExcelResponse());
-        updateLocal(response.getPdfResponse());
+        updateLocal(response == null ? null : response.getExcelResponse());
+        updateLocal(response == null ? null : response.getPdfResponse());
     }
 
     private void updateLocal(ExcelResponse excelResponse) {
@@ -134,12 +130,7 @@ public class ReportServiceImpl implements ReportService {
         return new ReportVO(entity);
     }
 
-    private void send(Object obj, String destination) {
-        queueMessagingTemplate.convertAndSend(destination, obj);
-    }
-
     @Override
-    //@Transactional // why this? email could fail
     public void updateAsyncPDFReport(SqsResponse response) {
         ReportRequestEntity entity = reportRequestRepo.findById(response.getReqId()).orElseThrow(RequestNotFoundException::new);
         var pdfReport = entity.getPdfReport();
@@ -159,7 +150,6 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-//    @Transactional
     public void updateAsyncExcelReport(SqsResponse response) {
         ReportRequestEntity entity = reportRequestRepo.findById(response.getReqId()).orElseThrow(RequestNotFoundException::new);
         var excelReport = entity.getExcelReport();
@@ -188,18 +178,8 @@ public class ReportServiceImpl implements ReportService {
     public boolean deleteEntry(String reqId) {
         log.info("Get Delete Command on ID: {}", reqId);
         ReportRequestEntity entry = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
-        RestTemplate rs = new RestTemplate();
         try {
-            //TODO: Also delete the real files.
             reportRequestRepo.deleteById(reqId);
-            System.out.println(entry.getExcelReport().getFileId());
-            System.out.println(entry.getExcelReport().getFileLocation());
-            System.out.println(entry.getExcelReport().getFileSize());
-            System.out.println(entry.getExcelReport().getCreatedTime());
-            System.out.println(entry.getPdfReport().getFileId());
-            System.out.println(entry.getPdfReport().getFileLocation());
-            System.out.println(entry.getPdfReport().getFileSize());
-            System.out.println(entry.getPdfReport().getCreatedTime());
             rs.delete("http://localhost:8888/excel/" + entry.getExcelReport().getFileId());
             rs.delete("http://localhost:9999/pdf/" + entry.getPdfReport().getFileId());
         } catch (Exception e) {

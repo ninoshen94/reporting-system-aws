@@ -49,7 +49,7 @@ public class ExcelServiceImpl implements ExcelService {
     public ExcelFile generateFile(ExcelRequest request, boolean multisheet) {
         ExcelFile file = new ExcelFile();
         file.setFileId("Excel- " + UUID.randomUUID().toString());
-        file.setGeneratedTime(LocalDateTime.now().toString());
+        file.setGeneratedTime(LocalDateTime.now());
         ExcelData data = new ExcelData();
         data.setTitle(request.getDescription());
         data.setFileId(file.getFileId());

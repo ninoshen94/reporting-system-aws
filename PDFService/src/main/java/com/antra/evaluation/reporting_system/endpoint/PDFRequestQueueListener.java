@@ -27,14 +27,11 @@ public class PDFRequestQueueListener {
 
     //@SqsListener("PDF_Request_Queue")
     public void queueListener(PDFRequest request) {
-        //log.info("Get request: {}", request);
-        PDFFile file = null;
         PDFResponse response = new PDFResponse();
-        System.out.println("Alert! :" + request);
         response.setReqId(request.getReqId());
 
         try {
-            file = pdfService.createPDF(request);
+            PDFFile file = pdfService.createPDF(request);
             response.setFileId(file.getId());
             response.setFileLocation(file.getFileLocation());
             response.setFileSize(file.getFileSize());
@@ -61,10 +58,3 @@ public class PDFRequestQueueListener {
         queueMessagingTemplate.convertAndSend("PDF_Response_Queue", message);
     }
 }
-/**
- * {
- *   "description":"Student Math Course Report",
- *   "headers":["Student #","Name","Class","Score"],
- *   "submitter":"Mrs. York1234"
- * }
- **/
