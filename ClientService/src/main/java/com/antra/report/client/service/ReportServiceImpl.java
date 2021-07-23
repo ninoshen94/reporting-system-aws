@@ -11,6 +11,7 @@ import com.antra.report.client.repository.ReportRequestRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -31,6 +32,15 @@ public class ReportServiceImpl implements ReportService {
     private final EmailService emailService;
     private final RestTemplate rs = new RestTemplate();
 
+    @Value("${excel.url}")
+    private String excelURL;
+
+    @Value("${pdf.url}")
+    private String pdfURL;
+
+    @Value("${eureka.url}")
+    private String microServerURL;
+
 
     public ReportServiceImpl(ReportRequestRepo reportRequestRepo, SNSService snsService, AmazonS3 s3Client, EmailService emailService) {
         this.reportRequestRepo = reportRequestRepo;
@@ -45,8 +55,8 @@ public class ReportServiceImpl implements ReportService {
             String reqId = request.getReqId();
             ReportRequestEntity entry = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
             reportRequestRepo.deleteById(request.getReqId());
-            rs.delete("http://localhost:8888/excel/" + entry.getExcelReport().getFileId());
-            rs.delete("http://localhost:9999/pdf/" + entry.getPdfReport().getFileId());
+            rs.delete(excelURL  + "/excel/" + entry.getExcelReport().getFileId());
+            rs.delete(pdfURL + "/pdf/" + entry.getPdfReport().getFileId());
         }
 
         request.setReqId("Req-"+ UUID.randomUUID().toString());
@@ -90,7 +100,7 @@ public class ReportServiceImpl implements ReportService {
 
     private void sendDirectRequests(ReportRequest request) {
         RestTemplate rs = new RestTemplate();
-        CombinedResponse response = rs.postForObject("http://localhost:80/sync", request, CombinedResponse.class);
+        CombinedResponse response = rs.postForObject(microServerURL + "/sync", request, CombinedResponse.class);
         if (response == null || response.getExcelResponse().isFailed()) {
             log.error("Excel Generation Error (Sync)");
         }
@@ -180,8 +190,8 @@ public class ReportServiceImpl implements ReportService {
         ReportRequestEntity entry = reportRequestRepo.findById(reqId).orElseThrow(RequestNotFoundException::new);
         try {
             reportRequestRepo.deleteById(reqId);
-            rs.delete("http://localhost:8888/excel/" + entry.getExcelReport().getFileId());
-            rs.delete("http://localhost:9999/pdf/" + entry.getPdfReport().getFileId());
+            rs.delete(excelURL + "/excel/" + entry.getExcelReport().getFileId());
+            rs.delete(pdfURL + "/pdf/" + entry.getPdfReport().getFileId());
         } catch (Exception e) {
             return false;
         }

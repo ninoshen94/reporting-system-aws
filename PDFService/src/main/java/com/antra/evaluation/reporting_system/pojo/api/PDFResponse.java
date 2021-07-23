@@ -11,10 +11,6 @@ public class PDFResponse {
     public PDFResponse() {
     }
 
-//    public PDFResponse(String fileId) {
-//        this.fileId = fileId;
-//    }
-
     public String getFileId() {
         return fileId;
     }

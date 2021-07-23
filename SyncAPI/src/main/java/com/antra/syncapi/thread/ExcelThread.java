@@ -5,6 +5,7 @@ import com.antra.syncapi.pojo.ExcelResponse;
 import com.antra.syncapi.pojo.ReportRequest;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,6 +17,9 @@ public class ExcelThread implements Callable<ExcelResponse> {
     private final RestTemplate rs;
     private final ReportRequest request;
     private ExcelResponse response;
+
+    @Value("${excel.url}")
+    private String excelURL;
 
     public ExcelThread(ReportRequest request) {
         this.response = new ExcelResponse();
@@ -30,7 +34,7 @@ public class ExcelThread implements Callable<ExcelResponse> {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<String> request = new HttpEntity<>(json.toString(), headers);
-            this.response = this.rs.postForEntity("http://localhost:8888/excel", request, ExcelResponse.class).getBody();
+            this.response = this.rs.postForEntity(excelURL + "/excel", request, ExcelResponse.class).getBody();
         } catch (Exception e) {
             response.setReqId(request.getReqId());
             response.setFailed(true);

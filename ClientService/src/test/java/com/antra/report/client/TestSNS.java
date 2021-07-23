@@ -21,7 +21,7 @@ public class TestSNS {
     @Test
     public void testReportService() {
         ReportRequest request = new ReportRequest();
-        request.setSubmitter("Dawei_test");
+        request.setSubmitter("tester");
         request.setDescription("This is just a test");
         request.setHeaders(List.of("Id","Name","Age"));
         request.setData(List.of(List.of("1","Dd","23"),List.of("2","AJ","32")));
@@ -30,7 +30,7 @@ public class TestSNS {
     @Test
     public void testSNSSend() {
         ReportRequest request = new ReportRequest();
-        request.setSubmitter("Dawei_test");
+        request.setSubmitter("tester");
         request.setDescription("This is just a test");
         request.setHeaders(List.of("Id","Name","Age"));
         request.setData(List.of(List.of("1","Dd","23"),List.of("2","AJ","32")));

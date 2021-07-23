@@ -1,6 +1,5 @@
 package com.antra.evaluation.reporting_system.entity;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverted;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTypeConverter;
 
 import java.time.LocalDateTime;

@@ -25,7 +25,6 @@ public class PDFRequestQueueListener {
         this.pdfService = pdfService;
     }
 
-    //@SqsListener("PDF_Request_Queue")
     public void queueListener(PDFRequest request) {
         PDFResponse response = new PDFResponse();
         response.setReqId(request.getReqId());

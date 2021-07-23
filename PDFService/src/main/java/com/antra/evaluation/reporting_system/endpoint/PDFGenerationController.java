@@ -3,7 +3,6 @@ package com.antra.evaluation.reporting_system.endpoint;
 import com.antra.evaluation.reporting_system.pojo.api.PDFRequest;
 import com.antra.evaluation.reporting_system.pojo.api.PDFResponse;
 import com.antra.evaluation.reporting_system.entity.PDFFile;
-import com.antra.evaluation.reporting_system.repo.PDFDatabaseRepo;
 import com.antra.evaluation.reporting_system.service.PDFService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,11 +32,11 @@ public class PDFGenerationController {
         log.info("Got request to generate PDF: {}", request);
 
         PDFResponse response = new PDFResponse();
-        PDFFile file = null;
+
         response.setReqId(request.getReqId());
 
         try {
-            file = pdfService.createPDF(request);
+            PDFFile file = pdfService.createPDF(request);
             response.setFileId(file.getId());
             response.setFileLocation(file.getFileLocation());
             response.setFileSize(file.getFileSize());

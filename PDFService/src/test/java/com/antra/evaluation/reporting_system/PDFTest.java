@@ -17,23 +17,4 @@ public class PDFTest {
         System.out.println(file.exists());
     }
 
-    @Test
-    public void pdf() {
-//        String jasperFileName = "CL.jasper";
-//        Map<String, Object> parameters = new HashMap<>();
-//
-//        parameters.put("content_str", "123");
-//
-//        List<Object> itemList = List.of("string");
-//        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(itemList);
-//
-//        try {
-//            JasperPrint jprint = JasperFillManager.fillReport(jasperFileName, parameters,dataSource);
-//            File temp = new File("test.pdf");
-//            JasperExportManager.exportReportToPdfFile(jprint, temp.getAbsolutePath());
-//
-//        } catch (JRException e) {
-//            throw new PDFGenerationException();
-//        }
-    }
 }

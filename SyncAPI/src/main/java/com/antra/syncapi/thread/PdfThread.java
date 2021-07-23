@@ -7,6 +7,7 @@ import com.antra.syncapi.pojo.ReportRequest;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,6 +20,9 @@ public class PdfThread implements Callable<PDFResponse> {
     private PDFResponse response;
     private ReportRequest request;
     private RestTemplate rs;
+
+    @Value("${pdf.url}")
+    private String pdfUrl;
 
     public PdfThread(ReportRequest request) {
         this.response = new PDFResponse();
@@ -33,7 +37,7 @@ public class PdfThread implements Callable<PDFResponse> {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<>(json.toString(), headers);
         try {
-            response = rs.postForEntity("http://localhost:9999/pdf", request, PDFResponse.class).getBody();
+            response = rs.postForEntity(pdfUrl + "/pdf", request, PDFResponse.class).getBody();
         } catch (Exception e) {
             response.setReqId(this.request.getReqId());
             response.setFailed(true);
