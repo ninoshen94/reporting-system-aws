@@ -12,11 +12,14 @@
         <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
             enabled. Please enable
             Javascript and reload this page!</h2></noscript>
+        <figure class="mask invisible" id="mask">
+            <img src="image/loading.gif" alt="loading" width="100px"/>
+        </figure>
 
         <div class="container" id="main-content">
             <div class="row">
-                <div class="col-md-10">
-                    <button class="btn btn-success loat-right ml-1" id="loadAllBtn" type="submit">Refresh All Data</button>
+                <div class="col-md-12">
+                    <button class="btn btn-success float-right ml-1" id="loadAllBtn" type="submit">Refresh All Data</button>
                     <button class="btn btn-info float-right ml-1" id="generateBtn" type="submit">Generate Report</button>
                 </div>
             </div>

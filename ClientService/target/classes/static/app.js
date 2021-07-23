@@ -66,6 +66,7 @@ function downloadFile(urlToSend) {
 }
 function showDelete(reqId){
     if(confirm("Are you sure to delete report?")){
+        $("#mask").removeClass("invisible");
         $.ajax({
             url : "report/" + reqId,
             type: "DELETE",
@@ -75,11 +76,13 @@ function showDelete(reqId){
             success: function(data, textStatus, jqXHR)
             {
                 alert("Deleted the entry successfully!")
+                $("#mask").addClass("invisible");
                 console.info(data);
                 loadAll();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 alert(textStatus + ' : ' + jqXHR.responseJSON.message);
+                $("#mask").addClass("invisible");
                 console.error(jqXHR);
                 console.error(jqXHR.responseJSON.message);
             }
@@ -144,6 +147,7 @@ function edit(reqId, isSync){
     if (!data) {
         return false;
     }
+    $("#mask").removeClass("invisible");
     $.ajax({
         url : isSync ? "report/" + reqId + "/sync" : "report/" + reqId + "/async",
         type: "PUT",
@@ -154,11 +158,13 @@ function edit(reqId, isSync){
         {
             console.info(data);
             alert("Updated successfully!")
+            $("#mask").addClass("invisible");
             $('#editing_report_model').modal('toggle');
             loadAll();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert(jqXHR.responseJSON.message);
+            $("#mask").removeClass("invisible");
             console.error(jqXHR);
             console.error(jqXHR.responseJSON.message);
         }
@@ -184,6 +190,7 @@ function submit(async) {
     if(!data) {
         return false;
     }
+    $("#mask").removeClass("invisible");
     $.ajax({
         url : async?"report/async":"report/sync",
         type: "POST",
@@ -194,10 +201,12 @@ function submit(async) {
         {
             console.info(data);
             $('#create_report_model').modal('toggle');
+            $("#mask").addClass("invisible");
             loadAll();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert(jqXHR.responseJSON.message);
+            $("#mask").addClass("invisible");
             console.error(jqXHR);
             console.error(jqXHR.responseJSON.message);
         }

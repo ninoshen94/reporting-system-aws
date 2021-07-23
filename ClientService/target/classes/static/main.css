@@ -4,12 +4,30 @@ html, body {
 }
 #main-content {
     max-width: 1280px;
+    min-width: 520px;
     padding: 2em 3em;
     background-color: white;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
 }
 
+#mask {
+    background-color: whitesmoke;
+    opacity: .8;
+    position: absolute;
+    z-index: 10000;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+img {
+    display: inline-block;
+    position: absolute !important;
+    left: 45%;
+    top: 48%;
+}
 .row {
     margin-top: 1rem;
 }
