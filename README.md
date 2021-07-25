@@ -107,7 +107,9 @@ As the second test will go through the hole process for sync generation api, whi
 
 Architecture
 -----------
-To be done soon.
+Picture below shows the architecture of this project. Please note that, some routes or services are omitted.
+
+![image](./arch.jpg)
 
 
 Author
